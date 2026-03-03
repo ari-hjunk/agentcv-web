@@ -1,17 +1,16 @@
-"use client";
+'use client';
 
-import { useState, useMemo } from "react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import AgentCard from "@/components/AgentCard";
-import { agents, categories } from "@/data/agents";
+import { useState, useMemo } from 'react';
+import Navbar from '@/components/Navbar';
+import AgentCard from '@/components/AgentCard';
+import { agents, categories } from '@/data/agents';
 
-type SortOption = "newest" | "popular" | "rated";
+type SortOption = 'newest' | 'popular' | 'rated';
 
 export default function AgentsPage() {
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("All");
-  const [sort, setSort] = useState<SortOption>("popular");
+  const [search, setSearch] = useState('');
+  const [category, setCategory] = useState('All');
+  const [sort, setSort] = useState<SortOption>('popular');
 
   const filtered = useMemo(() => {
     let result = agents;
@@ -27,26 +26,20 @@ export default function AgentsPage() {
       );
     }
 
-    if (category !== "All") {
+    if (category !== 'All') {
       result = result.filter((a) => a.categories.includes(category));
     }
 
     switch (sort) {
-      case "popular":
-        result = [...result].sort(
-          (a, b) => b.endorsements - a.endorsements
-        );
+      case 'popular':
+        result = [...result].sort((a, b) => b.endorsements - a.endorsements);
         break;
-      case "rated":
-        result = [...result].sort(
-          (a, b) => b.metrics.successRate - a.metrics.successRate
-        );
+      case 'rated':
+        result = [...result].sort((a, b) => b.metrics.successRate - a.metrics.successRate);
         break;
-      case "newest":
+      case 'newest':
         result = [...result].sort(
-          (a, b) =>
-            new Date(b.operationalSince).getTime() -
-            new Date(a.operationalSince).getTime()
+          (a, b) => new Date(b.operationalSince).getTime() - new Date(a.operationalSince).getTime()
         );
         break;
     }
@@ -60,9 +53,7 @@ export default function AgentsPage() {
       <main className="min-h-screen pt-24 pb-20">
         <div className="mx-auto max-w-6xl px-6">
           <div className="mb-10">
-            <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
-              Browse Agents
-            </h1>
+            <h1 className="text-3xl font-bold tracking-tight md:text-4xl">Browse Agents</h1>
             <p className="mt-2 text-text-secondary">
               Discover AI agents with verified profiles and performance data
             </p>
@@ -113,8 +104,8 @@ export default function AgentsPage() {
                 onClick={() => setCategory(cat)}
                 className={`rounded-lg px-4 py-2 text-sm font-medium transition-all ${
                   category === cat
-                    ? "bg-accent text-white"
-                    : "border border-border bg-surface-elevated text-text-secondary hover:text-text-primary"
+                    ? 'bg-accent text-white'
+                    : 'border border-border bg-surface-elevated text-text-secondary hover:text-text-primary'
                 }`}
               >
                 {cat}
@@ -124,7 +115,7 @@ export default function AgentsPage() {
 
           {/* Results */}
           <div className="mb-6 text-sm text-text-tertiary">
-            {filtered.length} agent{filtered.length !== 1 ? "s" : ""} found
+            {filtered.length} agent{filtered.length !== 1 ? 's' : ''} found
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -135,13 +126,11 @@ export default function AgentsPage() {
 
           {filtered.length === 0 && (
             <div className="py-20 text-center">
-              <p className="text-lg text-text-secondary">
-                No agents found matching your criteria.
-              </p>
+              <p className="text-lg text-text-secondary">No agents found matching your criteria.</p>
               <button
                 onClick={() => {
-                  setSearch("");
-                  setCategory("All");
+                  setSearch('');
+                  setCategory('All');
                 }}
                 className="mt-4 text-sm font-medium text-accent hover:text-accent-hover"
               >
@@ -151,7 +140,6 @@ export default function AgentsPage() {
           )}
         </div>
       </main>
-      <Footer />
     </>
   );
 }

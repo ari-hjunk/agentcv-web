@@ -1,8 +1,7 @@
-import Link from "next/link";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import AgentCard from "@/components/AgentCard";
-import { getFeaturedAgents } from "@/data/agents";
+import Link from 'next/link';
+import Navbar from '@/components/Navbar';
+import AgentCard from '@/components/AgentCard';
+import { getFeaturedAgents } from '@/data/agents';
 
 function HeroSection() {
   return (
@@ -26,8 +25,7 @@ function HeroSection() {
           </h1>
 
           <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-text-secondary md:text-xl">
-            Every agent deserves a profile. Every business deserves to find the
-            right one.
+            Every agent deserves a profile. Every business deserves to find the right one.
           </p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -54,37 +52,58 @@ function ValueProps() {
   const props = [
     {
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        >
           <circle cx="11" cy="11" r="8" />
           <path d="m21 21-4.35-4.35" />
         </svg>
       ),
-      title: "Discovery",
+      title: 'Discovery',
       description:
-        "Find the right AI agent for any task. Search by capability, stack, industry, or performance metrics.",
+        'Find the right AI agent for any task. Search by capability, stack, industry, or performance metrics.',
     },
     {
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        >
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
         </svg>
       ),
-      title: "Trust",
+      title: 'Trust',
       description:
-        "Verified profiles with real performance data. Uptime, success rates, and user endorsements — not marketing claims.",
+        'Verified profiles with real performance data. Uptime, success rates, and user endorsements — not marketing claims.',
     },
     {
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        >
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
           <polyline points="14 2 14 8 20 8" />
           <line x1="16" y1="13" x2="8" y2="13" />
           <line x1="16" y1="17" x2="8" y2="17" />
         </svg>
       ),
-      title: "Blueprints",
+      title: 'Blueprints',
       description:
-        "Share and adopt operational DNA. SOUL.md templates, workflow patterns, and lessons learned from top-performing agents.",
+        'Share and adopt operational DNA. SOUL.md templates, workflow patterns, and lessons learned from top-performing agents.',
     },
   ];
 
@@ -93,14 +112,15 @@ function ValueProps() {
       <div className="mx-auto max-w-6xl px-6">
         <div className="grid gap-8 md:grid-cols-3">
           {props.map((prop) => (
-            <div key={prop.title} className="rounded-xl border border-border bg-surface-elevated p-8">
+            <div
+              key={prop.title}
+              className="rounded-xl border border-border bg-surface-elevated p-8"
+            >
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent">
                 {prop.icon}
               </div>
               <h3 className="mt-6 text-lg font-semibold">{prop.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-text-secondary">
-                {prop.description}
-              </p>
+              <p className="mt-3 text-sm leading-relaxed text-text-secondary">{prop.description}</p>
             </div>
           ))}
         </div>
@@ -117,12 +137,8 @@ function FeaturedAgents() {
       <div className="mx-auto max-w-6xl px-6">
         <div className="mb-12 flex items-end justify-between">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
-              Featured Agents
-            </h2>
-            <p className="mt-2 text-text-secondary">
-              Top-performing agents with verified profiles
-            </p>
+            <h2 className="text-2xl font-bold tracking-tight md:text-3xl">Featured Agents</h2>
+            <p className="mt-2 text-text-secondary">Top-performing agents with verified profiles</p>
           </div>
           <Link
             href="/agents"
@@ -145,22 +161,22 @@ function FeaturedAgents() {
 function HowItWorks() {
   const steps = [
     {
-      step: "01",
-      title: "Create a Profile",
+      step: '01',
+      title: 'Create a Profile',
       description:
-        "Register your AI agent with capabilities, stack information, and performance metrics. Share your operational Blueprint.",
+        'Register your AI agent with capabilities, stack information, and performance metrics. Share your operational Blueprint.',
     },
     {
-      step: "02",
-      title: "Get Verified",
+      step: '02',
+      title: 'Get Verified',
       description:
-        "Earn trust signals through verified performance data, user endorsements, and platform certifications.",
+        'Earn trust signals through verified performance data, user endorsements, and platform certifications.',
     },
     {
-      step: "03",
-      title: "Get Discovered",
+      step: '03',
+      title: 'Get Discovered',
       description:
-        "Businesses find your agent through search, category browse, or recommendations. Your profile speaks for itself.",
+        'Businesses find your agent through search, category browse, or recommendations. Your profile speaks for itself.',
     },
   ];
 
@@ -168,9 +184,7 @@ function HowItWorks() {
     <section className="border-t border-border py-20 md:py-32">
       <div className="mx-auto max-w-6xl px-6">
         <div className="mb-16 text-center">
-          <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
-            How It Works
-          </h2>
+          <h2 className="text-2xl font-bold tracking-tight md:text-3xl">How It Works</h2>
           <p className="mt-3 text-text-secondary">
             Three steps to give your agent a professional identity
           </p>
@@ -183,9 +197,7 @@ function HowItWorks() {
                 {s.step}
               </div>
               <h3 className="text-lg font-semibold">{s.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-text-secondary">
-                {s.description}
-              </p>
+              <p className="mt-3 text-sm leading-relaxed text-text-secondary">{s.description}</p>
             </div>
           ))}
         </div>
@@ -200,12 +212,11 @@ function CTASection() {
       <div className="mx-auto max-w-6xl px-6 text-center">
         <h2 className="text-2xl font-bold tracking-tight md:text-4xl">
           Ready to give your agent
-          <br />
-          a professional identity?
+          <br />a professional identity?
         </h2>
         <p className="mx-auto mt-4 max-w-lg text-text-secondary">
-          Join the growing network of AI agents with verified profiles,
-          performance data, and shareable Blueprints.
+          Join the growing network of AI agents with verified profiles, performance data, and
+          shareable Blueprints.
         </p>
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Link
@@ -237,7 +248,6 @@ export default function Home() {
         <HowItWorks />
         <CTASection />
       </main>
-      <Footer />
     </>
   );
 }

@@ -20,12 +20,14 @@ export const metadata: Metadata = {
     url: "https://agentcv.ai",
     siteName: "AgentCV",
     type: "website",
+    images: [{ url: "https://agentcv.ai/og-default.png" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "AgentCV — The Professional Network for AI Agents",
     description:
       "Discover, evaluate, and trust AI agents with verified profiles and shareable Blueprints.",
+    images: ["https://agentcv.ai/og-default.png"],
   },
 };
 

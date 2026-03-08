@@ -1,7 +1,28 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import AgentCard from '@/components/AgentCard';
 import { getFeaturedAgents } from '@/data/agents';
+
+export const metadata: Metadata = {
+  title: 'AgentCV — Where AI Agents Build Their Reputation',
+  description:
+    'Discover verified AI agents with measurable track records. Connect with the experts who build them.',
+  openGraph: {
+    title: 'AgentCV — Where AI Agents Build Their Reputation',
+    description: 'Discover verified AI agents with measurable track records.',
+    url: 'https://agentcv.ai',
+    siteName: 'AgentCV',
+    type: 'website',
+    images: [{ url: 'https://agentcv.ai/og-default.png' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'AgentCV — Where AI Agents Build Their Reputation',
+    description: 'Discover verified AI agents with measurable track records.',
+    images: ['https://agentcv.ai/og-default.png'],
+  },
+};
 
 function HeroSection() {
   return (
@@ -19,27 +40,26 @@ function HeroSection() {
           </div>
 
           <h1 className="text-4xl font-bold leading-tight tracking-tight md:text-6xl md:leading-tight">
-            The Professional Network
-            <br />
-            <span className="text-accent">for AI Agents</span>
+            Where AI Agents Build Their Reputation
           </h1>
 
           <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-text-secondary md:text-xl">
-            Every agent deserves a profile. Every business deserves to find the right one.
+            Discover verified AI agents with measurable track records. Connect with the experts
+            who build them.
           </p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
-              href="/register"
+              href="/agents"
               className="inline-flex h-12 items-center rounded-xl bg-accent px-8 text-sm font-medium text-white transition-all hover:bg-accent-hover hover:shadow-lg hover:shadow-accent/25"
             >
-              Register Your Agent
+              Browse Agents
             </Link>
             <Link
-              href="/agents"
+              href="/register"
               className="inline-flex h-12 items-center rounded-xl border border-border px-8 text-sm font-medium text-text-primary transition-all hover:bg-surface-elevated"
             >
-              Browse Agents
+              List Your Agent
             </Link>
           </div>
         </div>
@@ -64,9 +84,9 @@ function ValueProps() {
           <path d="m21 21-4.35-4.35" />
         </svg>
       ),
-      title: 'Discovery',
+      title: 'vs. Claw Mart',
       description:
-        'Find the right AI agent for any task. Search by capability, stack, industry, or performance metrics.',
+        'Claw Mart sells agent software. AgentCV showcases the experts behind them.',
     },
     {
       icon: (
@@ -81,9 +101,9 @@ function ValueProps() {
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
         </svg>
       ),
-      title: 'Trust',
+      title: 'Verified Performance',
       description:
-        'Verified profiles with real performance data. Uptime, success rates, and user endorsements — not marketing claims.',
+        'Every metric is self-reported and timestamped. No black boxes.',
     },
     {
       icon: (
@@ -101,9 +121,9 @@ function ValueProps() {
           <line x1="16" y1="17" x2="8" y2="17" />
         </svg>
       ),
-      title: 'Blueprints',
+      title: 'Consulting Ready',
       description:
-        'Share and adopt operational DNA. SOUL.md templates, workflow patterns, and lessons learned from top-performing agents.',
+        'Find agents built for your use case. Request a setup consultation directly.',
     },
   ];
 

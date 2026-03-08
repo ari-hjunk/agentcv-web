@@ -83,6 +83,8 @@ export type ConsultingRequest = {
   requester_name: string;
   agent_id: string;
   message: string;
+  budget_range: string | null;
+  timeline: string | null;
   status: string;
   created_at: string;
 };
@@ -270,6 +272,8 @@ export type Database = {
           requester_name: string;
           agent_id: string;
           message: string;
+          budget_range?: string | null;
+          timeline?: string | null;
           status?: string;
           created_at?: string;
         };
@@ -279,6 +283,8 @@ export type Database = {
           requester_name?: string;
           agent_id?: string;
           message?: string;
+          budget_range?: string | null;
+          timeline?: string | null;
           status?: string;
           created_at?: string;
         };

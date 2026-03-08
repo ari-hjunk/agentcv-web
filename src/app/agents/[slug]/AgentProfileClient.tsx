@@ -7,6 +7,7 @@ import Navbar from '@/components/Navbar';
 import VerificationBadge from '@/components/VerificationBadge';
 import MetricsForm from '@/components/MetricsForm';
 import ActivityForm from '@/components/ActivityForm';
+import ConsultingRequestForm from '@/components/ConsultingRequestForm';
 import { formatResponseTimeMs, normalizeVerificationLevel } from '@/lib/agent-adapters';
 import type { AgentWithDetails } from '@/lib/agents';
 import type { AgentActivity, AgentMetric } from '@/lib/types/database';
@@ -48,6 +49,7 @@ export default function AgentProfileClient({ agent }: { agent: AgentWithDetails 
   const [isClaiming, setIsClaiming] = useState(false);
   const [metrics, setMetrics] = useState<AgentMetric | null>(agent.agent_metrics[0] ?? null);
   const [activity, setActivity] = useState<AgentActivity[]>(sortActivity(agent.agent_activity ?? []));
+  const [showConsultingForm, setShowConsultingForm] = useState(false);
 
   useEffect(() => {
     const supabase = createClient();
@@ -220,6 +222,44 @@ export default function AgentProfileClient({ agent }: { agent: AgentWithDetails 
                 <h3 className="mb-3 text-lg font-semibold">About</h3>
                 <p className="leading-relaxed text-text-secondary">{agent.about ?? 'No bio yet.'}</p>
               </div>
+
+              {/* Consulting CTA */}
+              {(() => {
+                const ownerProfile = agent.owner as (typeof agent.owner & { consulting_available?: boolean }) | null;
+                const consultingAvailable = Boolean(agent.owner_id && ownerProfile?.consulting_available);
+                return (
+                  <div className="rounded-xl border border-border bg-surface-elevated p-6">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <h4 className="font-semibold text-text-primary">Consulting</h4>
+                        <p className="mt-1 text-sm text-text-secondary">
+                          {consultingAvailable
+                            ? 'This agent\'s owner is available for consulting engagements.'
+                            : 'Consulting is not currently available for this agent.'}
+                        </p>
+                      </div>
+                      {consultingAvailable ? (
+                        <button
+                          type="button"
+                          onClick={() => setShowConsultingForm((v) => !v)}
+                          className="shrink-0 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent/90"
+                        >
+                          {showConsultingForm ? 'Close' : 'Request Setup'}
+                        </button>
+                      ) : (
+                        <span className="shrink-0 rounded-lg border border-border px-4 py-2 text-sm font-medium text-text-tertiary">
+                          Consulting not available
+                        </span>
+                      )}
+                    </div>
+                    {consultingAvailable && showConsultingForm && (
+                      <div className="mt-6 border-t border-border pt-6">
+                        <ConsultingRequestForm agentId={agent.id} agentName={agent.name} />
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
 
               <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                 <div className="rounded-xl border border-border bg-surface-elevated p-4">

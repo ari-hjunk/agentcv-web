@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import type { AgentWithDetails } from '@/lib/agents';
 import { toCardAgent } from '@/lib/agent-adapters';
 import type { Profile } from '@/lib/types/database';
+import ConsultingAvailabilityToggle from '@/components/ConsultingAvailabilityToggle';
 
 const OWNER_AGENT_SELECT = `
   *,
@@ -45,6 +46,12 @@ export default async function OwnerProfilePage({
     .select(OWNER_AGENT_SELECT)
     .eq('owner_id', typedProfile.id)
     .order('created_at', { ascending: false });
+
+  // Check if the viewing user is the profile owner (for toggle)
+  const {
+    data: { user: viewerUser },
+  } = await supabase.auth.getUser();
+  const isOwnProfile = viewerUser?.id === typedProfile.id;
 
   const twitterHref = toTwitterHref(typedProfile.twitter_url);
   const agents = ((ownerAgents ?? []) as AgentWithDetails[]).map(toCardAgent);
@@ -93,6 +100,14 @@ export default async function OwnerProfilePage({
                 </a>
               )}
             </div>
+            {isOwnProfile && (
+              <div className="mt-4 border-t border-border pt-4">
+                <p className="mb-2 text-xs font-medium uppercase tracking-wider text-text-tertiary">
+                  Consulting availability
+                </p>
+                <ConsultingAvailabilityToggle initialValue={typedProfile.consulting_available} />
+              </div>
+            )}
           </div>
         </div>
       </div>

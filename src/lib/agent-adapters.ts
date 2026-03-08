@@ -72,6 +72,7 @@ export function mockAgentToAgentWithDetails(agent: MockAgent): AgentWithDetails 
       bio: null,
       avatar_url: null,
       website_url: null,
+      twitter_url: null,
       consulting_available: false,
       consulting_rate: null,
       created_at: '',

@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { createClient } from '@/lib/supabase/server';
 import { getAgent } from '@/data/agents';
-import { toCardAgent } from '@/lib/agent-adapters';
+import { mockAgentToAgentWithDetails } from '@/lib/agent-adapters';
 import type { AgentWithDetails } from '@/lib/agents';
 import AgentProfileClient from '@/app/agents/[slug]/AgentProfileClient';
 
@@ -22,7 +22,6 @@ const AGENT_FULL_SELECT = `
 async function getAgentById(id: string): Promise<AgentWithDetails | null> {
   const supabase = await createClient();
 
-  // Try by UUID id first
   const { data: byId } = await supabase
     .from('agents')
     .select(AGENT_FULL_SELECT)
@@ -31,7 +30,6 @@ async function getAgentById(id: string): Promise<AgentWithDetails | null> {
 
   if (byId) return byId as AgentWithDetails;
 
-  // Try by slug
   const { data: bySlug } = await supabase
     .from('agents')
     .select(AGENT_FULL_SELECT)
@@ -63,9 +61,12 @@ export default async function AgentByIdPage({ params }: Props) {
   const { id } = await params;
 
   const dbAgent = await getAgentById(id);
-  const agent = dbAgent ? toCardAgent(dbAgent) : getAgent(id);
+  if (dbAgent) {
+    return <AgentProfileClient agent={dbAgent} />;
+  }
 
-  if (!agent) notFound();
+  const mockAgent = getAgent(id);
+  if (!mockAgent) notFound();
 
-  return <AgentProfileClient agent={agent} />;
+  return <AgentProfileClient agent={mockAgentToAgentWithDetails(mockAgent)} />;
 }

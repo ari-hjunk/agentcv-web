@@ -5,6 +5,7 @@ export type Profile = {
   bio: string | null;
   avatar_url: string | null;
   website_url: string | null;
+  twitter_url: string | null;
   consulting_available: boolean;
   consulting_rate: string | null;
   created_at: string;
@@ -106,6 +107,7 @@ export type Database = {
           bio?: string | null;
           avatar_url?: string | null;
           website_url?: string | null;
+          twitter_url?: string | null;
           consulting_available?: boolean;
           consulting_rate?: string | null;
           created_at?: string;
@@ -118,6 +120,7 @@ export type Database = {
           bio?: string | null;
           avatar_url?: string | null;
           website_url?: string | null;
+          twitter_url?: string | null;
           consulting_available?: boolean;
           consulting_rate?: string | null;
           created_at?: string;

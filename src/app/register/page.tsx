@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import Navbar from '@/components/Navbar';
 
 const CATEGORIES = [
@@ -29,13 +29,36 @@ const STACKS = [
   'Terraform',
 ];
 
+type RegisterFormData = {
+  name: string;
+  tagline: string;
+  category: string;
+  ownerName: string;
+  ownerEmail: string;
+  stack: string[];
+  about: string;
+  capabilities: string;
+  uptime: string;
+  tasksCompleted: string;
+  successRate: string;
+  soulmd: string;
+  workflows: string;
+  lessons: string;
+};
+
+type ApiSuccess = { success: true; slug: string };
+type ApiError = { error: string };
+type ApiResponse = ApiSuccess | ApiError;
+
 export default function RegisterPage() {
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<RegisterFormData>({
     name: '',
     tagline: '',
     category: '',
-    stack: [] as string[],
+    ownerName: '',
+    ownerEmail: '',
+    stack: [],
     about: '',
     capabilities: '',
     uptime: '',
@@ -45,8 +68,13 @@ export default function RegisterPage() {
     workflows: '',
     lessons: '',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState<{
+    kind: 'success' | 'error';
+    text: string;
+  } | null>(null);
 
-  const updateField = (field: string, value: string | string[]) => {
+  const updateField = <K extends keyof RegisterFormData>(field: K, value: RegisterFormData[K]) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -64,11 +92,75 @@ export default function RegisterPage() {
     { num: 4, label: 'Preview' },
   ];
 
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSubmitMessage(null);
+
+    if (step !== 4 || isSubmitting) {
+      return;
+    }
+
+    const requiredFields: Array<
+      keyof Pick<
+        RegisterFormData,
+        'name' | 'tagline' | 'category' | 'ownerName' | 'ownerEmail' | 'about'
+      >
+    > = ['name', 'tagline', 'category', 'ownerName', 'ownerEmail', 'about'];
+
+    const missingField = requiredFields.find((field) => formData[field].trim().length === 0);
+
+    if (missingField) {
+      setSubmitMessage({ kind: 'error', text: `Missing required field: ${missingField}` });
+      setStep(1);
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('/api/agents/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          tagline: formData.tagline,
+          category: formData.category,
+          ownerName: formData.ownerName,
+          ownerEmail: formData.ownerEmail,
+          about: formData.about,
+        }),
+      });
+
+      const data = (await response
+        .json()
+        .catch(() => ({ error: 'Invalid server response.' }))) as ApiResponse;
+
+      if (!response.ok || 'error' in data) {
+        setSubmitMessage({
+          kind: 'error',
+          text: 'error' in data ? data.error : 'Failed to register agent.',
+        });
+        return;
+      }
+
+      setSubmitMessage({
+        kind: 'success',
+        text: `Agent registered successfully. Slug: ${data.slug}`,
+      });
+    } catch {
+      setSubmitMessage({ kind: 'error', text: 'Network error. Please try again.' });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <>
       <Navbar />
       <main className="min-h-screen pt-24 pb-20">
-        <div className="mx-auto max-w-2xl px-6">
+        <form className="mx-auto max-w-2xl px-6" onSubmit={handleSubmit}>
           <div className="mb-10">
             <h1 className="text-3xl font-bold tracking-tight">Register Your Agent</h1>
             <p className="mt-2 text-text-secondary">
@@ -76,10 +168,9 @@ export default function RegisterPage() {
             </p>
           </div>
 
-          {/* Step indicator */}
           <div className="mb-10 flex items-center gap-2">
             {steps.map((s, i) => (
-              <div key={s.num} className="flex items-center gap-2 flex-1">
+              <div key={s.num} className="flex flex-1 items-center gap-2">
                 <div
                   className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-medium transition-colors ${
                     step >= s.num
@@ -103,7 +194,6 @@ export default function RegisterPage() {
             ))}
           </div>
 
-          {/* Step 1: Basic Info */}
           {step === 1 && (
             <div className="space-y-6">
               <div>
@@ -134,6 +224,7 @@ export default function RegisterPage() {
                   {CATEGORIES.map((cat) => (
                     <button
                       key={cat}
+                      type="button"
                       onClick={() => updateField('category', cat)}
                       className={`rounded-lg px-4 py-2 text-sm transition-all ${
                         formData.category === cat
@@ -153,6 +244,7 @@ export default function RegisterPage() {
                   {STACKS.map((s) => (
                     <button
                       key={s}
+                      type="button"
                       onClick={() => toggleStack(s)}
                       className={`rounded-lg px-4 py-2 text-sm transition-all ${
                         formData.stack.includes(s)
@@ -166,6 +258,29 @@ export default function RegisterPage() {
                 </div>
               </div>
 
+              <div className="grid gap-6 md:grid-cols-2">
+                <div>
+                  <label className="mb-2 block text-sm font-medium">Owner Name</label>
+                  <input
+                    type="text"
+                    value={formData.ownerName}
+                    onChange={(e) => updateField('ownerName', e.target.value)}
+                    placeholder="e.g., Alex Chen"
+                    className="w-full rounded-lg border border-border bg-surface-elevated px-4 py-3 text-sm outline-none transition-colors focus:border-accent placeholder:text-text-tertiary"
+                  />
+                </div>
+                <div>
+                  <label className="mb-2 block text-sm font-medium">Owner Email</label>
+                  <input
+                    type="email"
+                    value={formData.ownerEmail}
+                    onChange={(e) => updateField('ownerEmail', e.target.value)}
+                    placeholder="e.g., alex@example.com"
+                    className="w-full rounded-lg border border-border bg-surface-elevated px-4 py-3 text-sm outline-none transition-colors focus:border-accent placeholder:text-text-tertiary"
+                  />
+                </div>
+              </div>
+
               <div>
                 <label className="mb-2 block text-sm font-medium">About</label>
                 <textarea
@@ -173,13 +288,12 @@ export default function RegisterPage() {
                   onChange={(e) => updateField('about', e.target.value)}
                   placeholder="Describe what makes your agent unique..."
                   rows={4}
-                  className="w-full rounded-lg border border-border bg-surface-elevated px-4 py-3 text-sm outline-none transition-colors focus:border-accent placeholder:text-text-tertiary resize-none"
+                  className="w-full resize-none rounded-lg border border-border bg-surface-elevated px-4 py-3 text-sm outline-none transition-colors focus:border-accent placeholder:text-text-tertiary"
                 />
               </div>
             </div>
           )}
 
-          {/* Step 2: Capabilities */}
           {step === 2 && (
             <div className="space-y-6">
               <div>
@@ -193,7 +307,7 @@ export default function RegisterPage() {
                   onChange={(e) => updateField('capabilities', e.target.value)}
                   placeholder={'Code Generation: 95\nCode Review: 90\nTesting: 85'}
                   rows={6}
-                  className="w-full rounded-lg border border-border bg-surface-elevated px-4 py-3 text-sm font-mono outline-none transition-colors focus:border-accent placeholder:text-text-tertiary resize-none"
+                  className="w-full resize-none rounded-lg border border-border bg-surface-elevated px-4 py-3 text-sm font-mono outline-none transition-colors focus:border-accent placeholder:text-text-tertiary"
                 />
               </div>
 
@@ -232,7 +346,6 @@ export default function RegisterPage() {
             </div>
           )}
 
-          {/* Step 3: Blueprints */}
           {step === 3 && (
             <div className="space-y-6">
               <div className="rounded-xl border border-accent/20 bg-accent/5 p-4">
@@ -252,7 +365,7 @@ export default function RegisterPage() {
                   onChange={(e) => updateField('soulmd', e.target.value)}
                   placeholder="# SOUL.md - Who You Are&#10;&#10;## Core Truths&#10;..."
                   rows={8}
-                  className="w-full rounded-lg border border-border bg-surface-elevated px-4 py-3 text-sm font-mono outline-none transition-colors focus:border-accent placeholder:text-text-tertiary resize-none"
+                  className="w-full resize-none rounded-lg border border-border bg-surface-elevated px-4 py-3 text-sm font-mono outline-none transition-colors focus:border-accent placeholder:text-text-tertiary"
                 />
               </div>
 
@@ -263,7 +376,7 @@ export default function RegisterPage() {
                   onChange={(e) => updateField('workflows', e.target.value)}
                   placeholder="Describe your agent's key workflow patterns..."
                   rows={4}
-                  className="w-full rounded-lg border border-border bg-surface-elevated px-4 py-3 text-sm outline-none transition-colors focus:border-accent placeholder:text-text-tertiary resize-none"
+                  className="w-full resize-none rounded-lg border border-border bg-surface-elevated px-4 py-3 text-sm outline-none transition-colors focus:border-accent placeholder:text-text-tertiary"
                 />
               </div>
 
@@ -274,13 +387,12 @@ export default function RegisterPage() {
                   onChange={(e) => updateField('lessons', e.target.value)}
                   placeholder="Share mistakes and corrections that improved your agent..."
                   rows={4}
-                  className="w-full rounded-lg border border-border bg-surface-elevated px-4 py-3 text-sm outline-none transition-colors focus:border-accent placeholder:text-text-tertiary resize-none"
+                  className="w-full resize-none rounded-lg border border-border bg-surface-elevated px-4 py-3 text-sm outline-none transition-colors focus:border-accent placeholder:text-text-tertiary"
                 />
               </div>
             </div>
           )}
 
-          {/* Step 4: Preview */}
           {step === 4 && (
             <div className="space-y-6">
               <div className="rounded-xl border border-border bg-surface-elevated p-8">
@@ -342,10 +454,22 @@ export default function RegisterPage() {
             </div>
           )}
 
-          {/* Navigation */}
+          {submitMessage && (
+            <div
+              className={`mt-6 rounded-lg border px-4 py-3 text-sm ${
+                submitMessage.kind === 'success'
+                  ? 'border-green-500/40 bg-green-500/10 text-green-400'
+                  : 'border-red-500/40 bg-red-500/10 text-red-300'
+              }`}
+            >
+              {submitMessage.text}
+            </div>
+          )}
+
           <div className="mt-10 flex items-center justify-between">
             {step > 1 ? (
               <button
+                type="button"
                 onClick={() => setStep(step - 1)}
                 className="rounded-lg border border-border px-6 py-2.5 text-sm font-medium transition-colors hover:bg-surface-elevated"
               >
@@ -356,18 +480,23 @@ export default function RegisterPage() {
             )}
             {step < 4 ? (
               <button
+                type="button"
                 onClick={() => setStep(step + 1)}
                 className="rounded-lg bg-accent px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent-hover"
               >
                 Continue
               </button>
             ) : (
-              <button className="rounded-lg bg-accent px-8 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent-hover">
-                Submit Agent
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="rounded-lg bg-accent px-8 py-2.5 text-sm font-medium text-white transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isSubmitting ? 'Submitting...' : 'Submit Agent'}
               </button>
             )}
           </div>
-        </div>
+        </form>
       </main>
     </>
   );

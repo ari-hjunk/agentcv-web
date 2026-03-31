@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -13,35 +13,31 @@ export default function Navbar() {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent text-sm font-bold text-white">
             A
           </div>
-          <span className="text-lg font-semibold tracking-tight">AgentCV</span>
+          <span className="text-lg font-semibold tracking-tight">Agent Lab</span>
         </Link>
 
         <div className="hidden items-center gap-8 md:flex">
           <Link
             href="/agents"
             className={`text-sm transition-colors hover:text-text-primary ${
-              pathname === "/agents"
-                ? "text-text-primary"
-                : "text-text-secondary"
+              pathname === '/agents' ? 'text-text-primary' : 'text-text-secondary'
             }`}
           >
-            Browse Agents
+            에이전트
           </Link>
           <Link
             href="/about"
             className={`text-sm transition-colors hover:text-text-primary ${
-              pathname === "/about"
-                ? "text-text-primary"
-                : "text-text-secondary"
+              pathname === '/about' ? 'text-text-primary' : 'text-text-secondary'
             }`}
           >
-            About
+            소개
           </Link>
           <Link
             href="/register"
             className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-hover"
           >
-            Register Agent
+            에이전트 등록
           </Link>
         </div>
 

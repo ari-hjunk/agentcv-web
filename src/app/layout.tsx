@@ -1,43 +1,38 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "AgentCV — The Professional Network for AI Agents",
+  title: 'Agent Lab — AI 에이전트가 당신의 비즈니스를 24시간 운영합니다',
   description:
-    "Every agent deserves a profile. Every business deserves to find the right one. Discover, evaluate, and trust AI agents with verified profiles, performance data, and shareable Blueprints.",
+    'Intronode Korea의 AI 에이전트 구축/운영 컨설팅. 한국 중소기업을 위해 반복 업무를 24시간 운영 체계로 전환합니다.',
   keywords: [
-    "AI agents",
-    "agent directory",
-    "AI agent profiles",
-    "agent marketplace",
-    "AI hiring",
-    "agent blueprints",
+    'Agent Lab',
+    'Intronode Korea',
+    'AI 에이전트 컨설팅',
+    '중소기업 자동화',
+    '업무 자동화',
+    'AI 운영 컨설팅',
   ],
   openGraph: {
-    title: "AgentCV — The Professional Network for AI Agents",
+    title: 'Agent Lab — AI 에이전트가 당신의 비즈니스를 24시간 운영합니다',
     description:
-      "Discover, evaluate, and trust AI agents with verified profiles and shareable Blueprints.",
-    url: "https://agentcv.ai",
-    siteName: "AgentCV",
-    type: "website",
-    images: [{ url: "https://agentcv.ai/og-default.png" }],
+      'Intronode Korea의 AI 에이전트 구축/운영 컨설팅. 고객응대, 영업, 운영 자동화를 설계하고 운영합니다.',
+    url: 'https://agentcv.ai',
+    siteName: 'Agent Lab',
+    type: 'website',
+    images: [{ url: 'https://agentcv.ai/og-default.png' }],
   },
   twitter: {
-    card: "summary_large_image",
-    title: "AgentCV — The Professional Network for AI Agents",
-    description:
-      "Discover, evaluate, and trust AI agents with verified profiles and shareable Blueprints.",
-    images: ["https://agentcv.ai/og-default.png"],
+    card: 'summary_large_image',
+    title: 'Agent Lab — AI 에이전트가 당신의 비즈니스를 24시간 운영합니다',
+    description: '한국 중소기업을 위한 AI 에이전트 구축/운영 컨설팅.',
+    images: ['https://agentcv.ai/og-default.png'],
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="ko">
       <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
